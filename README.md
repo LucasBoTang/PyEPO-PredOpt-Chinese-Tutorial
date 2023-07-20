@@ -122,7 +122,7 @@ $$
 
 扰动方法则是另辟蹊径，它通过引入随机扰动来处理成本向量的预测值$\hat{\mathbf{c}}$。
 
-Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的期望值$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$代替$\mathbf{w}^* (\hat{\mathbf{c}})$。如图所示，决策的期望值$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$实际上可视为可行域极点（基本可行解）​​​​​​​的凸组合。与$\mathbf{w}^* (\hat{\mathbf{c}})$不同，只要$\hat{\mathbf{c}}$在$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$中发生一些微小的变化，可行域极点组合的比例就会相应变化。
+Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的期望值$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$代替$\mathbf{w}^* (\hat{\mathbf{c}})$。如图所示，$\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})$是可行域极点（基本可行解）的离散型随机变量，决策的期望值$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$实际上可视为可行域极点​​​​​​​的加权平均（凸组合）。与$\mathbf{w}^* (\hat{\mathbf{c}})$不同，只要$\hat{\mathbf{c}}$在$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$中发生一些微小的变化，可行域极点权重（其发生的概率）就会相应变化。
 
 ![Probability Extreme Point](media/044f4b46af76df9340c0e21795944381.png)
 
