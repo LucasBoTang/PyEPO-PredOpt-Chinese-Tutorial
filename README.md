@@ -84,7 +84,7 @@ $$
 
 ![Piecewise Constant Solver Function](media/81cbf99d80c180f7e810f50275b94d0f.png)
 
-既然梯度几乎处处为0，似乎梯度下降法并不可行。然而，科研的魅力正是将不可能变为可能。
+既然梯度几乎处处为0，梯度下降法似乎无法实施。然而，科研的魅力正是将不可能变为可能。面对这一挑战，研究者们提出了多种解决策略：一类是寻找替代的梯度信息，用以更新模型参数；另一类索性重新设计一个（有非0梯度的）替代损失函数。这两类思路基本囊括了基于梯度的端对端预测后优化算法：
 
 ### 基于KKT条件的隐函数求导
 
@@ -107,16 +107,6 @@ $$
 $$
 2 \mathbf{w}^* (\mathbf{c}) - 2 \mathbf{w}^* (2 \hat{\mathbf{c}} - \mathbf{c}) \in \frac{\partial l_{\text{SPO+}}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}}
 $$
-
-### 黑箱方法
-
-面对$\mathbf{w}^* (\mathbf{c})$的不可导问题，有一个更加简单粗暴的方法，即将求解器函数视为一个“黑箱”，并利用解空间的几何形状等性质找到替代梯度。
-
-如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法，引入一个插值超参数λ，对分片常数损失函数进行连续插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
-
-![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
-
-此外，Sahoo等人 [7] 提出了一种相当简洁的方案，即用负单位矩阵$- \mathbf{I}$替代求解器梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。我们可以将其称为“Negative Identity”方法。从直观角度理解，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们希望通过如下方式更新成本向量的预测值$\hat{\mathbf{c}}$：沿着损失函数上升的方向减少，沿着损失函数下降的方向增加，这会使$\mathbf{w}^* (\hat{\mathbf{c}})$接近最优决策$\mathbf{w}^* (\mathbf{c})$。另外，该研究也证明了，这个方法可以看作是“Differentiable Black-box”方法在特定超参数λ下的特例。
 
 ### 扰动方法
 
@@ -145,6 +135,16 @@ $$l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}})) =  \hat{\mathbf{
 
 $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}}  = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
 
+### 黑箱方法
+
+面对$\mathbf{w}^* (\mathbf{c})$的不可导问题，有一个更加简单粗暴的方法，即将求解器函数视为一个“黑箱”，并利用解空间的几何形状等性质找到替代梯度。
+
+如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法，引入一个插值超参数λ，对分片常数损失函数进行连续插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
+
+![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
+
+此外，Sahoo等人 [7] 提出了一种相当简洁的方案，即用负单位矩阵$- \mathbf{I}$替代求解器梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。我们可以将其称为“Negative Identity”方法。从直观角度理解，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们希望通过如下方式更新成本向量的预测值$\hat{\mathbf{c}}$：沿着损失函数上升的方向减少，沿着损失函数下降的方向增加，这会使$\mathbf{w}^* (\hat{\mathbf{c}})$接近最优决策$\mathbf{w}^* (\mathbf{c})$。另外，该研究也证明了，这个方法可以看作是“Differentiable Black-box”方法在特定超参数λ下的特例。
+
 ### 对比、排序方法：
 
 Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contrastive Estimation）” 的技巧，以巧妙地计算出替代损失函数。由于我们的可行域$\mathbf{w} \in \mathbf{W}$是固定不变的，因此在训练集以及训练、求解过程中，我们可以自然地收集到大量的可行解，形成一个解集合$\Gamma$。
@@ -164,19 +164,19 @@ $$
 
 ## 使用PyEPO进行端对端预测后优化
 
-PyEPO（PyTorch-based End-to-End Predict-then-Optimize Tool） [16] 是我读博期间的开发的工具，可以在GitHub上查找：<https://github.com/khalil-research/PyEPO>。它是一款基于Python的开源软件，支持预测后优化问题的建模和求解。PyEPO的核心功能是使用GurobiPy、Pyomo或其他求解器和算法建立优化模型，然后将优化模型嵌入到人工神经网络中进行端到端训练。具体来说，PyEPO借助PyTorch autograd模块，实现了如SPO+、黑箱方法、扰动方法以及对比排序方法等多种策略的框架。具体使用方法可以查看[文档](https://khalil-research.github.io/PyEPO)。
+PyEPO（PyTorch-based End-to-End Predict-then-Optimize Tool） [16] 是我读博期间的开发的工具，该工具的源代码已经发布在GitHub上，可以通过以下链接查找：<https://github.com/khalil-research/PyEPO>。它是一款基于Python的开源软件，支持预测后优化问题的建模和求解。PyEPO的核心功能是使用GurobiPy、Pyomo或其他求解器和算法建立优化模型，然后将优化模型嵌入到人工神经网络中进行端到端训练。具体来说，PyEPO借助PyTorch autograd模块，实现了如SPO+、黑箱方法、扰动方法以及对比排序方法等多种策略的框架。具体使用方法可以查看[文档](https://khalil-research.github.io/PyEPO)。
 
 ![Logo](media/a31aaba4a573c4e2a74723f5d555bdf2.png)
 
-作为一款开源工具，PyEPO也欢迎社区的贡献和反馈，我们也将持续更新和优化其中的算法。
+作为一款开源工具，PyEPO非常欢迎社区的反馈和贡献，我们也会持续更新并优化工具中的算法。
 
-可以从GitHub仓库下载 PyEPO：
+要下载PyEPO，你可以从GitHub仓库克隆：
 
 ```bash
 git clone -b main --depth 1 https://github.com/khalil-research/PyEPO.git
 ```
 
-然后安装：
+之后进行安装：
 
 ```bash
 pip install PyEPO/pkg/.
@@ -244,7 +244,7 @@ noise = 0.5 * torch.randn(num_data, num_cost) # random noise
 c_true = x_true @ weight_true + bias_true + noise # cost coef
 ```
 
-对于端到端预测后优化，只有成本向量$\mathbf{c}$作为标签是不够的，我们还需要最优解$\mathbf{w}^* (\mathbf{c})$和相应的目标函数值。因此，我们可以使用optDataset。它是从PyTorch的Dataset类扩展而来的，允许我们方便地使用optModel来获取求解数据，并可以直接被PyTorch的 DataLoader 使用。
+对于端到端预测后优化，只有成本向量$\mathbf{c}$作为标签是不够的，我们还需要最优解$\mathbf{w}^* (\mathbf{c})$和相应的目标函数值。因此，我们可以使用optDataset。optDataset是在PyTorch的Dataset类的基础上进行扩展的一个类，它允许我们利用optModel方便地获取求解数据，并且可以被PyTorch的DataLoader直接使用。
 
 ```python
 # split train test data
@@ -290,20 +290,57 @@ if torch.cuda.is_available():
 
 ### 模型的训练和测试
 
-PyEPO的核心组件就是它的autograd优化模块，可以方便地调用前文中提到的各种方法，比如SPO+、黑箱方法、对比方法：
+PyEPO的核心组件就是它的autograd优化模块，可以方便地调用前文中提到的各种方法，比如：
+
+#### SPO+
 
 ```python
 import pyepo
-
 # init SPO+ loss
 spop = pyepo.func.SPOPlus(optmodel, processes=2)
-# init PFY loss
-pfy = pyepo.func.perturbedFenchelYoung(optmodel, n_samples=3, sigma=1.0, processes=2)
-# init NCE loss
-nce = pyepo.func.NCE(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+```
+#### 黑箱方法
+
+```python
+import pyepo
+# init dbb optimizer layer
+dbb = pyepo.func.blackboxOpt(optmodel, lambd=20, processes=2)
+# init optimizer layer with identity grad
+nid = pyepo.func.negativeIdentity(optmodel, processes=2)
 ```
 
-接下来，我们可以正常使用PyTorch进行模型训练
+#### 扰动方法
+
+```python
+import pyepo
+# init perturbed optimizer layer
+ptb = pyepo.func.perturbedOpt(optmodel, n_samples=3, sigma=1.0, processes=2)
+# init perturbed Fenchel-Younge loss
+pfy = pyepo.func.perturbedFenchelYoung(optmodel, n_samples=3, sigma=1.0, processes=2)
+```
+
+#### 对比、排序方法
+
+```python
+import pyepo
+# init NCE loss
+nce = pyepo.func.NCE(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+# init constrastive MAP loss
+cmap = pyepo.func.contrastiveMAP(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+```
+
+```python
+import pyepo
+# init pointwise LTR loss
+ltr = pyepo.func.pointwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+# init pairwise LTR loss
+ltr = pyepo.func.pairwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+# init listwise LTR loss
+ltr = pyepo.func.listwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
+```
+
+
+接下来，以SPO+为例，我们可以正常使用PyTorch进行模型训练:
 
 ```python
   # set adam optimizer
@@ -320,7 +357,42 @@ nce = pyepo.func.NCE(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_tr
             x, c, w, z = x.cuda(), c.cuda(), w.cuda(), z.cuda()
         # forward pass
         cp = reg(x)
+        # spo+ loss
         loss = spop(cp, c, w, z)
+        # backward pass
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    # log
+    regret = pyepo.metric.regret(reg, optmodel, loader_test)
+    print("Loss: {:9.4f},  Regret: {:7.4f}%".format(loss.item(), regret*100))
+```
+
+由于不同的模块可能有不同的输入输出，在使用这些模块时，我们需要特别关注各模块的接口文档，确保我们的输入输出数据与其兼容，避免出现不一致的情况。
+
+以扰动优化（perturbedOpt）为例，其训练过程和SPO+有所不同:
+
+```python
+  # set adam optimizer
+  optimizer = torch.optim.Adam(reg.parameters(), lr=5e-3)
+  # set some loss
+  l1 = nn.L1Loss()
+
+  # train mode
+  reg.train()
+  for epoch in range(5):
+    # load data
+    for i, data in enumerate(loader_train):
+        x, c, w, z = data # feat, cost, sol, obj
+        # cuda
+        if torch.cuda.is_available():
+            x, c, w, z = x.cuda(), c.cuda(), w.cuda(), z.cuda()
+        # forward pass
+        cp = reg(x)
+        # perturbed optimizer
+        we = ptb(cp)
+        # loss
+        loss = l1(we, w)
         # backward pass
         optimizer.zero_grad()
         loss.backward()
