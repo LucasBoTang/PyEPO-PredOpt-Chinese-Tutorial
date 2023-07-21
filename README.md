@@ -120,7 +120,7 @@ Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的�
 
 $$
 \frac{\partial \mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]}{\partial \hat{\mathbf{c}}} \approx \frac{1}{K}
- \sum_{\kappa}^K {\mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa})}
+ \sum_{\kappa}^K {\mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa}) \boldsymbol{\xi}_{\kappa}}
 $$
 
 由于$\mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$存在导数且非0，梯度问题因此引刃而解。
