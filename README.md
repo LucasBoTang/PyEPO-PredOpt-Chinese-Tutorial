@@ -116,11 +116,11 @@ Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的�
 
 ![Probability Extreme Point](media/044f4b46af76df9340c0e21795944381.png)
 
-在实际操作中，我们用样本量为$K$的蒙特卡洛采样来近似期望，可得梯度：
+在实际操作中，我们用样本量为$K$的蒙特卡洛采样来近似期望：
 
 $$
-\frac{\partial \mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]}{\partial \hat{\mathbf{c}}} \approx \frac{1}{K}
- \sum_{\kappa}^K {\mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa}) \boldsymbol{\xi}_{\kappa}}
+\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})] \approx \frac{1}{K}
+ \sum_{\kappa}^K { \mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa})} 
 $$
 
 由于$\mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$存在导数且非0，梯度问题因此引刃而解。
