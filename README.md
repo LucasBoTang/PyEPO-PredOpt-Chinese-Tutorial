@@ -119,7 +119,7 @@ Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的�
 在实际操作中，我们用样本量为$K$的蒙特卡洛采样来近似期望，可得梯度：
 
 $$
-\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})] \approx \frac{1}{K}
+\frac{\partial \mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]}{\partial \hat{\mathbf{c}}} \approx \frac{1}{K}
  \sum_{\kappa}^K {\mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa})}
 $$
 
@@ -133,7 +133,7 @@ $$l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}})) =  \hat{\mathbf{
 
 这个损失函数可能看起来有些复杂，它甚至包含一个神秘的对偶函数$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$。但是，当我们对其进行求导操作时，会发现$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$实际上是常数，因此，梯度表达式非常简洁：
 
-$$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}}  = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
+$$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}} = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
 
 ### 黑箱方法
 
