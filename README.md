@@ -143,7 +143,7 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 ![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
 
-此外，Sahoo等人 [7] 提出了一种相当简洁的方案，即用负单位矩阵$- \mathbf{I}$替代求解器梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。我们可以将其称为“Negative Identity”方法。从直观角度理解，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们希望通过如下方式更新成本向量的预测值$\hat{\mathbf{c}}$：沿着$\mathbf{w}^* (\hat{\mathbf{c}})$上升的方向减少，沿着损失函数下降的方向增加，这会使$\mathbf{w}^* (\hat{\mathbf{c}})$接近最优决策$\mathbf{w}^* (\mathbf{c})$。另外，该研究也证明了，这个方法可以看作是“Differentiable Black-box”方法在特定超参数λ下的特例。
+此外，Sahoo等人 [7] 提出了一种相当简洁的方案，即用负单位矩阵$- \mathbf{I}$替代求解器梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。我们可以将其称为“Negative Identity”方法。从直观角度理解，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们希望通过如下方式更新成本向量的预测值$\hat{\mathbf{c}}$：沿着$\mathbf{w}^* (\hat{\mathbf{c}})$上升的方向减少，沿着$\mathbf{w}^* (\hat{\mathbf{c}})$下降的方向增加，这会使$\mathbf{w}^* (\hat{\mathbf{c}})$接近最优决策$\mathbf{w}^* (\mathbf{c})$。另外，该研究也证明了，这个方法可以看作是“Differentiable Black-box”方法在特定超参数λ下的特例。
 
 ### 对比、排序方法：
 
