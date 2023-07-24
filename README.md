@@ -34,7 +34,7 @@ $$
 
 在这里，$\mathbf{w} = (w_1,w_2)$代表的是决策变量，$\mathbf{W} = \lbrace w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$定义了可行域，而$\mathbf{c}=(c_1,c_2)$就是我们不确定的成本向量。
 
-给定成本向量$\mathbf{c}$，由于退化问题的存在，优化问题可能得到多个最优解。但假定使用某种特定的求解器（如Gurobi）时，只返回唯一一个最优解$\mathbf{w}^* (\mathbf{c})$。
+给定成本向量$\mathbf{c}$，由于退化问题的存在，优化问题可能得到多个最优解，但可以假定使用某种特定的求解器（如Gurobi）时，只返回唯一一个最优解$\mathbf{w}^* (\mathbf{c})$。
 
 有一组数据$\mathbf{D} = \lbrace(\mathbf{x}^1,\mathbf{c}^1), (\mathbf{x}^2,\mathbf{c}^2), ⋯, (\mathbf{x}^n,\mathbf{c}^n)\rbrace$，其中$\mathbf{x}$为数据特征，我们可以利用机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$来最小化某个损失函数$l(\mathbf{g}(\mathbf{x},\boldsymbol{\theta}),\mathbf{c})$。其中，$\boldsymbol{\theta}$是模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数，会在训练过程中不断更新，而$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$则是成本向量$\mathbf{c}$的预测值。由此我们可以利用数据驱动的方式来预测不确定的参数，帮助实现优化决策。
 
@@ -44,7 +44,7 @@ $$
 
 ![End-to-End Pipeline Framework](media/df9889a4142bfb2523e1a67d849f72eb.png)
 
-对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，并计算损失函数$l(\mathbf{w}^* (\hat{\mathbf{c}}),\mathbf{c})$来直接衡量决策损失。
+对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \hat{\mathbf{c}}^{\top} \mathbf{w}$，并计算损失函数$l(\mathbf{w}^* (\hat{\mathbf{c}}),\mathbf{c})$来直接衡量决策损失。
 
 因此，对于依赖于链式法则进行反向传播的模型（如神经网络），关键部分是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。端对端预测后优化的各类算法几乎都是在此基础上展开的。然而，在此，我们先不深入讨论这些算法，因为我们我们必须先回答一个更为重要，也是更致命的问题：
 
