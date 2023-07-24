@@ -92,7 +92,7 @@ Amos和Kolter提出“OptNet” [10] ，通过求解KKT条件的偏微分矩阵�
 
 ### SPO+
 
-不同于KKT方法，Elmachtoub和Grigas [1] 为决策误差找到了一个凸且可导的替代损失函数SPO+ Loss。
+不同于KKT方法，Elmachtoub和Grigas [1] 为目标函数是线性（$\mathbf{c}^{\top} \mathbf{w}$）的决策误差找到了一个凸且可导的替代损失函数SPO+ Loss。
 
 在这里，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们先定义一个决策误差$l_{\text{Regret}} (\hat{\mathbf{c}}, \mathbf{c}) = \mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$，衡量实际成本向量$\mathbf{c}$下，根据预测成本向量$\hat{\mathbf{c}}$产生的最优解$\mathbf{w}^* (\hat{\mathbf{c}})$和实际最优解$\mathbf{w}^* (\mathbf{c})$在目标值上的差距。
 
