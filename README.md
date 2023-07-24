@@ -76,7 +76,7 @@ $$
 然而，其局限性也很明显。尽管研究人员已经做出了许多尝试，比如Kervadec等人的“Constrained deep networks: Lagrangian optimization via log-barrier extensions” [8]，但目前的预测模型在处理带有硬约束（Hard Constraints）的问题上仍存在难度。因此，模仿学习的预测结果常常面临可行性问题，特别是对于高维度、有复杂约束的优化问题。
 
 
-## 如何进行线性问题的端对端预测后优化？
+## 如何进行端对端预测后优化？
 
 尽管也存在基于决策树的模型SPO Tree [9]，大部分方法还是依赖梯度下降更新参数。之前提到，端对端学习的关键是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。
 
