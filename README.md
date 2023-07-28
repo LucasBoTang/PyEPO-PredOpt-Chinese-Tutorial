@@ -165,7 +165,7 @@ $$
 
 最后，我们来聊一个堪称邪道的方法——损失函数近似法。当我们的预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$预测出成本向量$\hat{\mathbf{c}}$后，我们需要寻找最优解$\mathbf{w}^* (\hat{\mathbf{c}})$，然后计算相应的决策损失$l(\hat{\mathbf{c}}, \mathbf{c})$。然而，这个过程面临着两个主要的问题：一是优化求解过程计算效率低下，二是损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$可能不存在有效的梯度。
 
-针对这些问题，Shah等人 [17] 提出了一个颇为惊人的方案：局部优化决策损失（Locally Optimized Decision Loss）。他们提出对于任意决策误差的损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$，我们都可以使用一个额外的神经网络模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$进行拟合。具体来说，他们通过采样预测成本向量和其对应的真实值$(\hat{\mathbf{c}}, \mathbf{c})$，训练近似函数模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$，其损失定义为真实损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$和近似损失函数$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的均方误差：
+针对这些问题，Shah等人 [17] 提出了一个颇为惊人的方案：局部优化决策损失（Locally Optimized Decision Loss）。他们提出对于任意决策误差的损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$，我们都可以使用一个额外的神经网络模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$进行拟合。具体来说，他们通过采样预测成本向量和其对应的真实值$(\hat{\mathbf{c}}, \mathbf{c})$，训练近似函数模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$，其损失定义为真实损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$和近似损失函数$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的均方误差（MSE）：
 
 $$
 { \lVert l(\hat{\mathbf{c}}, \mathbf{c}) - h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c}) \rVert}^2
