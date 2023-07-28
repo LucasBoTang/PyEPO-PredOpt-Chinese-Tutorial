@@ -139,7 +139,7 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 面对$\mathbf{w}^* (\mathbf{c})$的不可导问题，有一个更加简单粗暴的方法，即将求解器函数视为一个“黑箱”，并利用解空间的几何形状等性质找到替代梯度。
 
-如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法引入一个插值超参数$\lambda$。对于一个成本向量预测值$\hat{\mathbf{c}}$，在$\hat{\mathbf{c}}$与$\hat{\mathbf{c}} + \lambda \frac{\partial l (\hat{\mathbf{c}}, \cdot)}{partial \mathbf{w}^* (\hat{{\mathbf{c}}})}$之间对分片常数损失函数$l (\hat{\mathbf{c}}, \cdot)$进行线性插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
+如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法引入一个插值超参数$\lambda$。对于一个成本向量预测值$\hat{\mathbf{c}}$，在$\hat{\mathbf{c}}$与$\hat{\mathbf{c}} + \lambda \frac{\partial l (\hat{\mathbf{c}}, \cdot)}{\partial \mathbf{w}^* (\hat{{\mathbf{c}}})}$之间对分片常数损失函数$l (\hat{\mathbf{c}}, \cdot)$进行线性插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
 
 ![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
 
