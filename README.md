@@ -59,7 +59,7 @@ $$
 
 在日常生活中，人们只关心决策的好坏，而非对各项指标预测的准确度。正如我们驱车赶往目的地时，只关心自己是否选中捷径，而无须精确预测每段可能经过的路段耗费的时间。
 
-让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
+让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
 
 这个例子揭示了一个有趣的现象：后者虽然在预测误差上比前者大，但在决策上却是最优的。
 
@@ -139,7 +139,7 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 面对$\mathbf{w}^* (\mathbf{c})$的不可导问题，有一个更加简单粗暴的方法，即将求解器函数视为一个“黑箱”，并利用解空间的几何形状等性质找到替代梯度。
 
-如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法，引入一个插值超参数λ，对分片常数损失函数进行连续插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
+如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法引入一个插值超参数$\lambda$。对于一个成本向量预测值$\hat{\mathbf{c}}$，在$\hat{\mathbf{c}}$与$\hat{\mathbf{c}} + \lambda \frac{\partial l (\hat{\mathbf{c}}, \cdot)}{partial \mathbf{w}^* (\hat{{\mathbf{c}}})}$之间对分片常数损失函数$l (\hat{\mathbf{c}}, \cdot)$进行线性插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
 
 ![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
 
