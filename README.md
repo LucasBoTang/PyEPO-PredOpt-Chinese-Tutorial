@@ -116,7 +116,7 @@ Berthet等人 [4] 用在高斯随机扰动$\boldsymbol{\xi}$下最优决策的�
 
 ![Probability Extreme Point](media/044f4b46af76df9340c0e21795944381.png)
 
-接下来，我们“只”需要通过概率密度的积分求期望$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]  = \int \mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}) \Pr(\boldsymbol{\xi})$，然后发现好像做不到。在实际操作中，我们用样本量为$K$的蒙特卡洛采样来近似期望：
+接下来，我们“只”需要通过概率密度函数$f(\boldsymbol{\xi})$的积分求期望$\mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]  = \int \mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}) f(\boldsymbol{\xi}) d \boldsymbol{\xi}$，然后发现好像做不到。在实际操作中，我们用样本量为$K$的蒙特卡洛采样来近似期望：
 
 $$
 \mathbb{E}^{\boldsymbol{\xi}} [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})] \approx \frac{1}{K}
