@@ -170,6 +170,8 @@ PyEPO（PyTorch-based End-to-End Predict-then-Optimize Tool） [16] 是我读博
 
 作为一款开源工具，PyEPO非常欢迎社区的反馈和贡献，我们也会持续更新并优化工具中的算法。
 
+### 下载和安装
+
 要下载PyEPO，你可以从GitHub仓库克隆：
 
 ```bash
