@@ -80,7 +80,7 @@ $$
 
 尽管也存在基于决策树的模型SPO Tree [9]，大部分方法还是依赖梯度下降更新参数。之前提到，端对端学习的关键是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。然而，传统的优化求解器和算法往往并未提供梯度信息。
 
-更坏的消息是：线性规划、整数线性规划等具有线性目标函数的问题，其最优解$\mathbf{w}^* (\mathbf{c})$作为成本向量$\mathbf{c}$的函数，是一个分片常数函数（Piecewise Constant Function），它的一阶导数要么为0，要么不存在。熟悉线性规划敏感性分析的话，就会知道成本向量系数$\mathbf{c}$的变化时，最优解$\mathbf{w}^* (\mathbf{c})$要么不发生改变，要么会从可行域的一个极点跳到另一个极点。我们依然以线性规划$\underset{w_1,w_2}{\max} \lbrace c_1 w_1+c_2 w_2: w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$为例，如图：
+更坏的消息是：线性规划、整数线性规划等具有线性目标函数的问题，其最优解$\mathbf{w}^* (\mathbf{c})$作为成本向量$\mathbf{c}$的函数，是一个分片常数函数（Piecewise Constant Function），它的一阶导数要么为0，要么不存在。熟悉线性规划敏感性分析的话，就会知道成本向量系数$\mathbf{c}$的元素发生变化时，最优解$\mathbf{w}^* (\mathbf{c})$要么不发生改变，要么会从可行域的一个极点跳到另一个极点。我们依然以线性规划$\underset{w_1,w_2}{\max} \lbrace c_1 w_1+c_2 w_2: w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$为例，如图：
 
 ![Piecewise Constant Solver Function](media/81cbf99d80c180f7e810f50275b94d0f.png)
 
