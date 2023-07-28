@@ -123,7 +123,7 @@ $$
  \sum_{\kappa}^K { \mathbf{w}^*(\hat{\mathbf{c}} + \sigma \boldsymbol{\xi}_{\kappa})} 
 $$
 
-由于$\frac{\partial\mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]}{\hat{\mathbf{c}}$存在且非0，梯度问题由此引刃而解。
+由于$\frac{\partial\mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]}{\hat{\mathbf{c}}}$存在且非0，梯度问题由此引刃而解。
 
 除了加法扰动，Dalle等人 [14] 进一步提出了乘法扰动，同样引入高斯随机扰动$\boldsymbol{\xi}$，但让预测成本向量$\hat{\mathbf{c}}$与$e^{\sigma \boldsymbol{\xi} - 1/2 {\sigma}^2}$对应位元素相乘。乘法扰动消除了加法扰动可能引起的正负号变化问题。在一些特定的应用中，例如Dijkstra算法等，对成本向量有非负性的要求，乘法扰动就非常有用。
 
