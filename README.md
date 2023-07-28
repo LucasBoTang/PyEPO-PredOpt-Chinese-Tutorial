@@ -171,7 +171,7 @@ $$
 { \lVert l(\hat{\mathbf{c}}, \mathbf{c}) - h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c}) \rVert}^2
 $$
 
-接下来，我们固定训练好的模型的参数，作为决策损失的近似。在这个近似的指导下，我们通过对$h_{\text{LODL}} (\mathbf{g}(\mathbf{x},\boldsymbol{\theta}), \mathbf{c})$执行梯度下降操作来更新预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数$\boldsymbol{\theta}$。这个流程既避免了求解优化问题的计算成本，又确保了损失函数能够有效地计算梯度。
+接下来，我们固定好模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的参数，作为决策损失的近似。在这个近似的指导下，我们通过对$h_{\text{LODL}} (\mathbf{g}(\mathbf{x},\boldsymbol{\theta}), \mathbf{c})$执行梯度下降操作来更新预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数$\boldsymbol{\theta}$。这个流程既避免了求解优化问题的计算成本，又确保了损失函数能够有效地计算梯度。
 
 虽然这种方法看似天方夜谭，实则深度根植于深度学习的一项核心理论——“万能近似定理（Universal Approximation Theorem）”，即神经网络理论上具备拟合任何函数的能力。事实上，值函数的近似是强化学习中的一种常见策略。因此，用类似的方法拟合决策误差在端到端预测后优化的场景中也是行得通的。
 
