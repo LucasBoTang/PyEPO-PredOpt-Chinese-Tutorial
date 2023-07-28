@@ -161,6 +161,22 @@ $$
 
 在单文档方法中，我们希望成本向量的预测值$\hat{\mathbf{c}}$在可行解的子集$\Gamma$中的得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$尽可能接近$\mathbf{c}^{\top} \mathbf{w}$；在文档对方法中，我们可以在最优解和其他解之间创造排序得分的差值；而在文档列表方法中，我们根据排序得分使用SoftMax函数计算每个可能解$\mathbf{w} \in \Gamma$被排在最前面的概率$P(\mathbf{w} | \mathbf{c})$，然后定义损失为概率的交叉熵$l_{\text{LTR}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|} \sum_{\mathbf{w} \in \Gamma} P(\mathbf{w} | \mathbf{c}) \log P(\mathbf{w} | \hat{\mathbf{c}})$。
 
+### 损失函数近似法
+
+最后，我们来聊一个堪称邪道的方法——损失函数近似法。当我们的预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$预测出成本向量$\hat{\mathbf{c}}$后，我们需要寻找最优解$\mathbf{w}^* (\hat{\mathbf{c}})$，然后计算相应的决策损失$l(\hat{\mathbf{c}}, \mathbf{c})$。然而，这个过程面临着两个主要的问题：一是优化求解过程计算效率低下，二是损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$可能不存在有效的梯度。
+
+针对这些问题，Shah等人 [17] 提出了一个颇为惊人的方案：局部优化决策损失（LODL）。他们提出对于任意决策误差的损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$，我们都可以使用一个额外的神经网络模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$进行拟合。具体来说，他们通过采样预测成本向量和其对应的真实值来计算损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$，并将损失定义为真实损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$和近似损失函数$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的均方误差：
+
+$$
+{\lVert \hat{l(\hat{\mathbf{c}}, \mathbf{c}) - h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c}) \rVert}^2
+$$
+
+接下来，我们固定训练好的模型的参数，作为决策损失的近似。在这个近似的指导下，我们通过对$h_{\text{LODL}} (\mathbf{g}(\mathbf{x},\boldsymbol{\theta}))$执行梯度下降操作来更新预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数$\boldsymbol{\theta}$。这个流程既避免了求解优化问题的计算成本，又确保了损失函数能够有效地计算梯度。
+
+虽然这种方法看似天方夜谭，实则深度根植于深度学习的一项核心理论——“万能近似定理（Universal Approximation Theorem）”，即神经网络理论上具备拟合任何函数的能力。事实上，值函数的近似是强化学习中的一种常见策略。因此，用类似的方法拟合决策误差在端到端预测后优化的场景中也是行得通的。
+
+这种策略优雅地规避了直接求解优化问题的计算效率挑战，同时充分利用了神经网络在拟合复杂损失函数方面的强大能力。然而，这也带来了额外的模型训练步骤，并且近似损失函数的准确性将直接影响到最终模型的表现。尽管理论上神经网络具备表示任何函数的能力，但在实践中，要训练神经网络有效地学习并近似特定函数可能并非易事。这涉及到一个复杂损失函数的优化问题，可能存在大量的局部最优解，而且可能受到过拟合、梯度消失、梯度爆炸等问题的影响。此外，这种方法在基准数据集上的性能尚缺乏详尽的比较，其实际效用仍待进一步探索和证明。
+
 
 ## 使用PyEPO进行端对端预测后优化
 
@@ -442,3 +458,5 @@ ltr = pyepo.func.listwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=da
 [15] Liu, T. Y. (2009). Learning to rank for information retrieval. Foundations and Trends® in Information Retrieval, 3(3), 225-331.
 
 [16] Tang, B., & Khalil, E. B. (2022). PyEPO: A PyTorch-based end-to-end predict-then-optimize library for linear and integer programming. arXiv preprint arXiv:2206.14234.
+
+[17] Shah, S., Wilder, B., Perrault, A., & Tambe, M. (2022). Learning (local) surrogate loss functions for predict-then-optimize problems. arXiv e-prints, arXiv-2203.
