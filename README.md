@@ -64,7 +64,7 @@ $$
 
 文献中的解释——“基于预测误差训练预测模型与直接考虑决策误差相比，基于预测误差训练预测模型会导致更糟糕的决策。”用人话来说就是：像$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c})$这样的预测误差，不能准确地衡量决策的质量。
 
-在日常生活中，人们只关心决策的好坏，而非对各项指标预测的准确度。正如我们驱车赶往目的地时，只关心自己是否选中捷径，而无须精确预测每段可能经过的路段耗费的时间。
+在日常生活中，人们只关心决策的好坏，而不是各项指标预测的准确度。正如我们驱车赶往目的地时，只关心自己是否选中捷径，而无须精确预测每段可能经过的路段所耗费的时间。
 
 让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$l_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
 
@@ -87,7 +87,7 @@ $$
 
 尽管也存在基于决策树的模型SPO Tree [9]，大部分方法还是依赖梯度下降更新参数。之前提到，端对端学习的关键是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。然而，传统的优化求解器和算法往往并未提供梯度信息。
 
-更坏的消息是：线性规划、整数线性规划等具有线性目标函数的问题，其最优解$\mathbf{w}^* (\mathbf{c})$作为成本向量$\mathbf{c}$的函数，是一个分片常数函数（Piecewise Constant Function），它的一阶导数要么为0，要么不存在。熟悉线性规划敏感性分析的话，就会知道成本向量系数$\mathbf{c}$的元素发生变化时，最优解$\mathbf{w}^* (\mathbf{c})$要么不发生改变，要么会从可行域的一个极点跳到另一个极点。我们依然以线性规划$\underset{w_1,w_2}{\max} \lbrace c_1 w_1+c_2 w_2: w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$为例，如图：
+更坏的消息是：线性规划、整数线性规划等具有线性目标函数的问题，其最优解$\mathbf{w}^* (\mathbf{c})$作为成本向量$\mathbf{c}$的函数，是一个分片常数函数（Piecewise Constant Function），它的一阶导数要么为0，要么不存在。熟悉线性规划敏感性分析的话，就会知道成本向量系数$\mathbf{c}$的元素发生变化时，最优解$\mathbf{w}^* (\mathbf{c})$要么不发生改变，要么会从可行域的一个极点跳到另一个极点。我们依然以线性规划$\underset{w_1,w_2}{\max} \lbrace c_1 w_1 + c_2 w_2: w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$为例，如图：
 
 ![Piecewise Constant Solver Function](media/81cbf99d80c180f7e810f50275b94d0f.png)
 
@@ -95,7 +95,7 @@ $$
 
 ### 5.1 基于KKT条件的隐函数求导
 
-Amos和Kolter提出“OptNet” [10] ，通过求解KKT条件的偏微分矩阵线性方程组来计算求解器反向传播的梯度。为了克服线性规划中无法得到非0梯度的问题，Wilder等人 [11] 在线性目标函数中加入了一个微小的二次项。基于这类方法，后续的研究者展开了多方面的探索。例如，引入割平面法（Cutting-Plane Method）以处理整数问题 [12] ，或使用障碍函数来替代拉格朗日罚函数 [13] 。
+Amos和Kolter提出“OptNet” [10]，通过求解KKT条件的偏微分矩阵线性方程组来计算求解器反向传播的梯度。为了克服线性规划中无法得到非0梯度的问题，Wilder等人 [11] 在线性目标函数中加入了一个微小的二次项。基于这类方法，后续的研究者展开了多方面的探索。例如，引入割平面法（Cutting-Plane Method）以处理整数问题 [12]，或使用障碍函数来替代拉格朗日罚函数 [13]。
 
 ### 5.2 SPO+
 
@@ -326,15 +326,6 @@ import pyepo
 # init SPO+ loss
 spop = pyepo.func.SPOPlus(optmodel, processes=2)
 ```
-#### 黑箱方法
-
-```python
-import pyepo
-# init dbb optimizer layer
-dbb = pyepo.func.blackboxOpt(optmodel, lambd=20, processes=2)
-# init optimizer layer with identity grad
-nid = pyepo.func.negativeIdentity(optmodel, processes=2)
-```
 
 #### 扰动方法
 
@@ -344,6 +335,16 @@ import pyepo
 ptb = pyepo.func.perturbedOpt(optmodel, n_samples=3, sigma=1.0, processes=2)
 # init perturbed Fenchel-Younge loss
 pfy = pyepo.func.perturbedFenchelYoung(optmodel, n_samples=3, sigma=1.0, processes=2)
+```
+
+#### 黑箱方法
+
+```python
+import pyepo
+# init dbb optimizer layer
+dbb = pyepo.func.blackboxOpt(optmodel, lambd=20, processes=2)
+# init optimizer layer with identity grad
+nid = pyepo.func.negativeIdentity(optmodel, processes=2)
 ```
 
 #### 对比、排序方法
@@ -365,6 +366,8 @@ ltr = pyepo.func.pairwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=da
 # init listwise LTR loss
 ltr = pyepo.func.listwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=dataset_train)
 ```
+
+#### 训练
 
 
 接下来，以SPO+为例，我们可以正常使用PyTorch进行模型训练:
