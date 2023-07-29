@@ -146,7 +146,7 @@ $$
 
 $$l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}})) =  \hat{\mathbf{c}}^{\top} \mathbf{w}^* ({\mathbf{c}}) - F^{\boldsymbol{\xi}}(\hat{\mathbf{c}}) - \Omega (\mathbf{w}^*  ({\mathbf{c}}))$$
 
-这个损失函数可能看起来有些复杂，它甚至包含一个神秘的对偶函数$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$。但是，当我们对其进行求导操作时，会发现$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$实际上是常数，因此，梯度表达式非常简洁：
+这个损失函数可能看起来有些复杂，它甚至包含一个神秘的对偶函数$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$。但是，当我们对其进行求导操作时，会发现$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$实际上是常数，因此，梯度表达式非常简单：
 
 $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}} = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
 
