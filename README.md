@@ -162,7 +162,7 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 ### 5.5 对比、排序方法：
 
-Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contrastive Estimation）” 的技巧，以巧妙地计算出替代损失函数。
+Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contrastive Estimation）” 的技巧，巧妙地计算出替代损失函数。
 
 首先，由于我们的可行域$\mathbf{w} \in \mathbf{W}$是固定不变的，因此在训练集以及训练、求解过程中，我们可以自然地收集到大量的可行解，形成一个解集合$\Gamma$。
 
