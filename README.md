@@ -84,7 +84,7 @@ $$
 
 毫无疑问，模仿学习在计算效率上具有显著优势，因为它规避了计算效率的主要瓶颈：优化求解。
 
-然而，其局限性也很明显。尽管研究人员已经做出了许多尝试，比如Kervadec等人的“Constrained deep networks: Lagrangian optimization via log-barrier extensions” [8]，但目前的预测模型在处理带有硬约束（Hard Constraints）的问题上仍存在难度。因此，模仿学习的预测结果常常面临可行性问题，特别是对于高维度、有复杂约束的优化问题。
+然而，其局限性也很明显。尽管研究人员已经做出了许多尝试，比如Kervadec等人的“Constrained deep networks: Lagrangian optimization via log-barrier extensions” [8]，但目前的预测模型，无论是线性回归、决策树、还是神经网络，在处理带有硬约束（Hard Constraints）的问题上仍存在难度。因此，模仿学习的预测结果常常面临可行性问题，特别是对于高维度、有复杂约束的优化问题。
 
 
 ## 5 如何进行端对端预测后优化？
