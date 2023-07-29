@@ -49,7 +49,7 @@ $$
 借助链式法则，我们能够计算出模型参数$\boldsymbol{\theta}$相对于损失函数$l(\mathbf{w}^* (\hat{\mathbf{c}}),\mathbf{c})$的梯度，用于更新模型参数：
 
 $$
-\frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \bm{\theta}} = \frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \hat{\bm{c}}} \frac{\partial \hat{\bm{c}}}{\partial \bm{\theta}} = \frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \bm{w}^*(\hat{\bm{c}})} \frac{\partial \bm{w}^*(\hat{\bm{c}})}{\partial \hat{\bm{c}}} \frac{\partial \hat{\bm{c}}}{\partial \bm{\theta}}
+\frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \bm{\theta}} = \frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \hat{\bm{c}}} \frac{\partial \hat{\bm{c}}}{\partial \bm{\theta}} = \frac{\partial l(\hat{\bm{c}}, \cdot)}{\partial \bm{w}^* (\hat{\bm{c}})} \frac{\partial \bm{w}^* (\hat{\bm{c}})}{\partial \hat{\bm{c}}} \frac{\partial \hat{\bm{c}}}{\partial \bm{\theta}}
 $$
 
 显然，对于依赖于链式法则进行反向传播的模型（如神经网络），关键部分是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。端对端预测后优化的各类算法几乎都是在此基础上展开的。然而，在此，我们先不深入讨论这些算法，因为我们我们必须先回答一个更为重要，也是更致命的问题：
