@@ -44,12 +44,12 @@ $$
 
 ![End-to-End Pipeline Framework](media/df9889a4142bfb2523e1a67d849f72eb.png)
 
-对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \hat{\mathbf{c}}^{\top} \mathbf{w}$，并计算损失函数$l(\mathbf{w}^* (\hat{\mathbf{c}}),\mathbf{c})$来直接衡量决策损失。
+对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \hat{\mathbf{c}}^{\top} \mathbf{w}$，并计算损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$来直接衡量决策损失。
 
-借助链式法则，我们能够计算出模型参数$\boldsymbol{\theta}$相对于损失函数$l(\mathbf{w}^* (\hat{\mathbf{c}}),\mathbf{c})$的梯度，用于更新模型参数：
+借助链式法则，我们能够计算出模型参数$\boldsymbol{\theta}$相对于损失函数$l(\hat{\mathbf{c}}, \mathbf{c})$的梯度，用于更新模型参数：
 
 $$
-\frac{\partial l(\hat{\mathbf{c}}, \cdot)}{\partial \mathbf{\theta}} = \frac{\partial l(\hat{\mathbf{c}}, \cdot)}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \mathbf{\theta}} = \frac{\partial l(\hat{\mathbf{c}}, \cdot)}{\partial \mathbf{w}^* (\hat{\mathbf{c}})} \frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \mathbf{\theta}}
+\frac{\partial l(\hat{\mathbf{c}}, \mathbf{c})}{\partial \mathbf{\theta}} = \frac{\partial l(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \mathbf{\theta}} = \frac{\partial l(\hat{\mathbf{c}}, \mathbf{c})}{\partial \mathbf{w}^* (\hat{\mathbf{c}})} \frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \mathbf{\theta}}
 $$
 
 显然，对于依赖于链式法则进行反向传播的模型（如神经网络），关键部分是计算求解过程的梯度$\frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}}$。端对端预测后优化的各类算法几乎都是在此基础上展开的。然而，在此，我们先不深入讨论这些算法，因为我们我们必须先回答一个更为重要，也是更致命的问题：
