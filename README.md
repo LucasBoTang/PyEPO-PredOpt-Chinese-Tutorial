@@ -172,7 +172,7 @@ $$
 l_{\text{NCE}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|-1} \sum_{\mathbf{w} \in {\Gamma \setminus {\mathbf{w}^* (\mathbf{c})}}}(\hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c})-\hat{\mathbf{c}}^{\top} \mathbf{w})
 $$
 
-受到这项工作构造损失函数区分可行解的启发，Mandi等人 [6] 提出了一种新思路，将端对端预测后优化任务转化为一个排序学习(Learning to rank) [15]，学习一个目标函数（如$\hat{\mathbf{c}}^{\top} \mathbf{w}$）作为排序得分，以便对可行解的子集$\Gamma$进行正确排序（和使用真实成本向量$\mathbf{c}$时一致）。和之前的方法相比，这种方法的优势在于，它对使用的优化方法和目标函数的形式不加以限制。
+受到这项工作构造损失函数区分最优解的启发，Mandi等人 [6] 提出了一种新思路，将端对端预测后优化任务转化为一个排序学习(Learning to rank) [15]，学习一个目标函数（如$\hat{\mathbf{c}}^{\top} \mathbf{w}$）作为排序得分，以便对可行解的子集$\Gamma$进行正确排序（和使用真实成本向量$\mathbf{c}$时一致）。和之前的方法相比，这种方法的优势在于，它对使用的优化方法和目标函数的形式不加以限制。
 
 例如，对于一个线性规划问题，$\mathbf{c}^{\top} \mathbf{w}$可以被视为排序得分。对于预测的成本向量$\hat{\mathbf{c}}$，为了排序得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$能在解集$\mathbf{w} \in \Gamma$中有正确的排序，我们可以采用以下三种经典的排序学习方法：单文档方法（Pointwise Approach）、文档对方法（Pairwise Approach）、以及文档列表方法（Listwise Approach）。
 
