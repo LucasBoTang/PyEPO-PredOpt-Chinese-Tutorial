@@ -101,7 +101,7 @@ Amos和Kolter提出“OptNet” [10]，通过求解KKT条件的偏微分矩阵�
 
 不同于KKT方法，Elmachtoub和Grigas [1] 为目标函数是线性（$\mathbf{c}^{\top} \mathbf{w}$）的决策误差找到了一个凸且可导的替代损失函数SPO+ Loss。
 
-在这里，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们先定义一个决策损失“遗憾”：$l_{\text{Regret}} (\hat{\mathbf{c}}, \mathbf{c}) = \mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$，衡量实际成本向量$\mathbf{c}$下，实际目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}})$与最优目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$之间的差距，可以理解为优化间隙（optimality gap）。
+在这里，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们先定义一个决策损失“遗憾”：$l_{\text{Regret}} (\hat{\mathbf{c}}, \mathbf{c}) = \mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$，衡量实际成本向量$\mathbf{c}$下，实际目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}})$与最优目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$之间的差距，也可以理解为优化间隙（optimality gap）。
 
 由于$\mathbf{w}^* (\mathbf{c})$没有非0导数，这个损失函数同样也没有非0导数。Elmachtoub和Grigas [1] 找到了这个函数的一个凸上界作为替代：
 
@@ -146,7 +146,7 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 面对$\mathbf{w}^* (\mathbf{c})$的不可导问题，有一个更加简单粗暴的方法，即将求解器函数视为一个“黑箱”，并利用解空间的几何形状等性质找到替代梯度。
 
-如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法引入一个插值超参数$\lambda$。对于一个成本向量预测值$\hat{\mathbf{c}}$，在$\hat{\mathbf{c}}$与$\hat{\mathbf{c}} + \lambda \frac{\partial l (\hat{\mathbf{c}}, \cdot)}{\partial \mathbf{w}^* (\hat{{\mathbf{c}}})}$之间对分片常数损失函数$l (\hat{\mathbf{c}}, \cdot)$进行线性插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
+如图所示，Pogancic等人 [3] 提出了“Differentiable Black-box”方法引入一个插值超参数$\lambda$。对于一个成本向量预测值$\hat{\mathbf{c}}$，在$\hat{\mathbf{c}}$与$\hat{\mathbf{c}} + \lambda \frac{\partial l (\hat{\mathbf{c}}, \mathbf{c})}{\partial \mathbf{w}^* (\hat{{\mathbf{c}}})}$之间对分片常数损失函数$l (\hat{\mathbf{c}}, \mathbf{c})$进行线性插值，从而将其转化为分片线性函数（Piecewise Affine Function），以此可得非0梯度。
 
 ![Affine Interpolation](media/ffa7d65c364918231fad932f5c088abe.png)
 
@@ -154,15 +154,17 @@ $$\frac{\partial l_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{
 
 ### 5.5 对比、排序方法：
 
-Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contrastive Estimation）” 的技巧，以巧妙地计算出替代损失函数。由于我们的可行域$\mathbf{w} \in \mathbf{W}$是固定不变的，因此在训练集以及训练、求解过程中，我们可以自然地收集到大量的可行解，形成一个解集合$\Gamma$。
+Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contrastive Estimation）” 的技巧，以巧妙地计算出替代损失函数。
 
-该方法的关键思路是，将非最优可行解的子集$\Gamma \setminus \mathbf{w}^* (c)$作为负样本，让最优解和其他解之间的的差值尽可能大。对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，有：
+首先，由于我们的可行域$\mathbf{w} \in \mathbf{W}$是固定不变的，因此在训练集以及训练、求解过程中，我们可以自然地收集到大量的可行解，形成一个解集合$\Gamma$。
+
+该方法的关键思路是，将非最优可行解的子集$\Gamma \setminus \mathbf{w}^* (c)$作为负样本，让最优解和“负样本”之间的的差值尽可能大。对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，有：
 
 $$
 l_{\text{NCE}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|-1} \sum_{\mathbf{w} \in {\Gamma \setminus {\mathbf{w}^* (\mathbf{c})}}}(\hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c})-\hat{\mathbf{c}}^{\top} \mathbf{w})
 $$
 
-基于这项工作，Mandi等人 [6] 提出了一种新思路，将端对端预测后优化任务转化为一个排序学习(Learning to rank) [15]，其目标是学习一个目标函数（如$\hat{\mathbf{c}}^{\top} \mathbf{w}$）作为排序得分，以便对可行解的子集$\Gamma$进行正确排序（和使用真实成本向量$\mathbf{c}$时一致）。和之前的方法相比，这种方法的优势在于，它对使用的优化方法和目标函数的形式不加以限制。
+基于这项工作，Mandi等人 [6] 提出了一种新思路，将端对端预测后优化任务转化为一个排序学习(Learning to rank) [15]，学习一个目标函数（如$\hat{\mathbf{c}}^{\top} \mathbf{w}$）作为排序得分，以便对可行解的子集$\Gamma$进行正确排序（和使用真实成本向量$\mathbf{c}$时一致）。和之前的方法相比，这种方法的优势在于，它对使用的优化方法和目标函数的形式不加以限制。
 
 例如，对于一个线性规划问题，$\mathbf{c}^{\top} \mathbf{w}$可以被视为排序得分。对于预测的成本向量$\hat{\mathbf{c}}$，为了排序得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$能在解集$\mathbf{w} \in \Gamma$中有正确的排序，我们可以采用以下三种经典的排序学习方法：单文档方法（Pointwise Approach）、文档对方法（Pairwise Approach）、以及文档列表方法（Listwise Approach）。
 
