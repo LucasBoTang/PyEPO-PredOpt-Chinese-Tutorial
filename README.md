@@ -254,10 +254,10 @@ from coptpy import COPT
 from coptpy import Envr
 from pyepo.model.copt import optCoptModel
 
-class myOptMode\ell(optGrbModel):
-    def _getMode\ell(self):
+class myOptModel(optGrbModel):
+    def _getModel(self):
         # ceate a model
-        m = Envr().createMode\ell()
+        m = Envr().createModel()
         # varibles
         x = m.addVars(5, nameprefix='x', vtype=COPT.BINARY)
         # sense
@@ -268,7 +268,7 @@ class myOptMode\ell(optGrbModel):
         m.addConstr(5*x[0]+4*x[1]+6*x[2]+2*x[3]+3*x[4]<=15)
         return m, x
 
-optmodel = myOptMode\ell()
+optmodel = myOptModel()
 ```
 
 #### Gurobi
@@ -278,10 +278,10 @@ import gurobipy as gp
 from gurobipy import GRB
 from pyepo.model.grb import optGrbModel
 
-class myOptMode\ell(optGrbModel):
-    def _getMode\ell(self):
+class myOptModel(optGrbModel):
+    def _getModel(self):
         # ceate a model
-        m = gp.Mode\ell()
+        m = gp.Model()
         # varibles
         x = m.addVars(5, name="x", vtype=GRB.BINARY)
         # sense
@@ -292,7 +292,7 @@ class myOptMode\ell(optGrbModel):
         m.addConstr(5*x[0]+4*x[1]+6*x[2]+2*x[3]+3*x[4]<=15)
         return m, x
 
-optmodel = myOptMode\ell()
+optmodel = myOptModel()
 ```
 
 ### 6.3 生成数据集
