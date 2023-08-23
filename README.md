@@ -84,7 +84,7 @@ $$
 
 毫无疑问，模仿学习在计算效率上具有显著优势，因为它规避了计算效率的主要瓶颈：优化求解。
 
-然而，其局限性也很明显。尽管研究人员已经做出了许多尝试，比如Kervadec等人的“Constrained deep networks: Lagrangian optimization via log-barrier extensions” [8]，但目前的预测模型，无论是线性回归、决策树、还是神经网络，在处理带有硬约束（Hard Constraints）的问题上仍存在难度。因此，模仿学习的预测结果常常面临可行性问题，特别是对于高维度、有复杂约束的优化问题。
+然而，其局限性也很明显。尽管研究人员已经做出了许多尝试，比如Kervadec等人在损失函数上添加了修改过的障碍函数 [8]；Donti等人使用了梯度投影（Gradiant Projection）将不可行解修正至可行域 [18]。但目前的预测模型，无论是线性回归、决策树、还是神经网络，在处理带有硬约束（Hard Constraints）的问题上仍存在难度。因此，模仿学习的预测结果常常面临可行性问题，特别是对于高维度、有复杂约束的优化问题。
 
 
 ## 5 如何进行端对端预测后优化？
@@ -518,5 +518,3 @@ ltr = pyepo.func.listwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=da
 [17] Shah, S., Wilder, B., Perrault, A., & Tambe, M. (2022). Learning (local) surrogate loss functions for predict-then-optimize problems. arXiv e-prints, arXiv-2203.
 
 [18] Donti, P. L., Rolnick, D., & Kolter, J. Z. (2021). DC3: A learning method for optimization with hard constraints. arXiv preprint arXiv:2104.12225.
-
-[19] Bengio, Y., Léonard, N., & Courville, A. (2013). Estimating or propagating gradients through stochastic neurons for conditional computation. arXiv preprint arXiv:1308.3432.
