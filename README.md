@@ -70,7 +70,7 @@ $$
 
 在日常生活中，人们只关心决策的好坏，而不是各项指标预测的准确度。正如我们驱车赶往目的地时，只关心自己是否选中捷径，而无须精确预测每段可能经过的路段所耗费的时间。
 
-让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
+让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$\mathcal{L}^_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
 
 这个例子揭示了一个有趣的现象：后者虽然在预测误差上比前者大，但在决策上却是最优的。
 
