@@ -516,3 +516,7 @@ ltr = pyepo.func.listwiseLTR(optmodel, processes=2, solve_ratio=0.05, dataset=da
 [16] Tang, B., & Khalil, E. B. (2022). PyEPO: A PyTorch-based end-to-end predict-then-optimize library for linear and integer programming. arXiv preprint arXiv:2206.14234.
 
 [17] Shah, S., Wilder, B., Perrault, A., & Tambe, M. (2022). Learning (local) surrogate loss functions for predict-then-optimize problems. arXiv e-prints, arXiv-2203.
+
+[18] Donti, P. L., Rolnick, D., & Kolter, J. Z. (2021). DC3: A learning method for optimization with hard constraints. arXiv preprint arXiv:2104.12225.
+
+[19] Bengio, Y., Léonard, N., & Courville, A. (2013). Estimating or propagating gradients through stochastic neurons for conditional computation. arXiv preprint arXiv:1308.3432.
