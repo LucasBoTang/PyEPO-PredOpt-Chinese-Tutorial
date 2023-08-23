@@ -15,7 +15,7 @@
 
 本文就是要讨论数据驱动下，带有不确定参数的优化问题。这种问题通常通过“预测后优化”的范式来解决。这一问题在现实生产生活中有着深远的意义。举例来说，车辆路径规划中，由于交通状况的不断变化，在每段道路的行驶时间是不确定的；电网调度中，不同地区的电力负荷也会随时间发生变化；投资组合中，金融资产的收益率会受到市场波动的影响。以上这些情况都涉及到优化模型参数的不确定性，但是，我们可以利用时间、天气、金融因素等特征，预测这些不确定的参数，从而进行最优决策。
 
-此外，本文也会介绍一个端对端预测后优化的开源框架PyEPO (<https://github.com/khalil-research/PyEPO>)。PyEPO基于PyTorch， 主要针对（但不限于）线性规划（LP）和整数线性规划（ILP），集成了文中提到的多种算法，并提供了Gurobi、Pyomo等优化建模工具的API。PyEPO可以作为PyTorch的autograd模块进行深度学习的训练和测试，使用起来简洁明了。这个框架的设计目标是为广大学界和业界用户提供便捷的工具，帮助大家更好地理解和应用端对端预测后优化方法。
+此外，本文也会介绍一个端对端预测后优化的开源框架PyEPO (<https://github.com/khalil-research/PyEPO>)。PyEPO基于PyTorch， 主要针对（但不限于）线性规划（LP）和整数线性规划（ILP），集成了文中提到的多种算法，并提供了COPT、Gurobi、Pyomo等优化建模工具的API。PyEPO可以作为PyTorch的autograd模块进行深度学习的训练和测试，使用起来简洁明了。这个框架的设计目标是为广大学界和业界用户提供便捷的工具，帮助大家更好地理解和应用端对端预测后优化方法。
 
 
 ## 2 问题描述和符号
@@ -182,7 +182,9 @@ $$
 
 例如，对于一个线性规划问题，$\mathbf{c}^{\top} \mathbf{w}$可以被视为排序得分。对于预测的成本向量$\hat{\mathbf{c}}$，为了排序得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$能在解集$\mathbf{w} \in \Gamma$中有正确的排序，我们可以采用以下三种经典的排序学习方法：单文档方法（Pointwise Approach）、文档对方法（Pairwise Approach）、以及文档列表方法（Listwise Approach）。
 
-在单文档方法中，我们希望成本向量的预测值$\hat{\mathbf{c}}$在可行解的子集$\Gamma$中的得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$尽可能接近$\mathbf{c}^{\top} \mathbf{w}$；在文档对方法中，我们可以在最优解和其他解之间创造排序得分的差值；而在文档列表方法中，我们根据排序得分使用SoftMax函数计算每个可能解$\mathbf{w} \in \Gamma$被排在最前面的概率$P(\mathbf{w} | \mathbf{c})$，然后定义损失为概率的交叉熵$l_{\text{LTR}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|} \sum_{\mathbf{w} \in \Gamma} P(\mathbf{w} | \mathbf{c}) \log P(\mathbf{w} | \hat{\mathbf{c}})$。
+在单文档方法中，我们希望成本向量的预测值$\hat{\mathbf{c}}$在可行解的子集$\Gamma$中的得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$尽可能接近$\mathbf{c}^{\top} \mathbf{w}$；在文档对方法中，我们可以在最优解和其他解之间创造排序得分的差值；而在文档列表方法中，我们根据排序得分使用SoftMax函数计算每个可能解$\mathbf{w} \in \Gamma$被排在最前面的概率$P(\mathbf{w} | \mathbf{c})$，然后定义损失为概率的交叉熵:
+$$
+l_{\text{LTR}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|} \sum_{\mathbf{w} \in \Gamma} P(\mathbf{w} | \mathbf{c}) \log P(\mathbf{w} | \hat{\mathbf{c}})$$
 
 ### 5.6 损失函数近似法
 
@@ -205,7 +207,7 @@ $$
 
 ## 6 使用PyEPO进行端对端预测后优化
 
-PyEPO（PyTorch-based End-to-End Predict-then-Optimize Tool） [16] 是我读博期间的开发的工具，该工具的源代码已经发布在GitHub上，可以通过以下链接查找：<https://github.com/khalil-research/PyEPO>。它是一款基于Python的开源软件，支持预测后优化问题的建模和求解。PyEPO的核心功能是使用GurobiPy、Pyomo或其他求解器和算法建立优化模型，然后将优化模型嵌入到人工神经网络中进行端到端训练。具体来说，PyEPO借助PyTorch autograd模块，实现了如SPO+、黑箱方法、扰动方法以及对比排序方法等多种策略的框架。具体使用方法可以查看[文档](https://khalil-research.github.io/PyEPO)。
+PyEPO（PyTorch-based End-to-End Predict-then-Optimize Tool） [16] 是我读博期间的开发的工具，该工具的源代码已经发布在GitHub上，可以通过以下链接查找：<https://github.com/khalil-research/PyEPO>。它是一款基于Python的开源软件，支持预测后优化问题的建模和求解。PyEPO的核心功能是使用CoptPy、GurobiPy、Pyomo或其他求解器和算法建立优化模型，然后将优化模型嵌入到人工神经网络中进行端到端训练。具体来说，PyEPO借助PyTorch autograd模块，实现了如SPO+、黑箱方法、扰动方法以及对比排序方法等多种策略的框架。具体使用方法可以查看[文档](https://khalil-research.github.io/PyEPO)。
 
 ![Logo](media/a31aaba4a573c4e2a74723f5d555bdf2.png)
 
@@ -243,7 +245,33 @@ s.t. \quad & 3 x_0 + 4 x_1 + 3 x_2 + 6 x_3 + 4 x_4 \leq 12 \\
 \end{aligned}
 $$
 
-PyEPO也提供了Gurobi的API，用户能轻松地对各种优化问题进行建模，无需手动编写复杂的求解过程：
+PyEPO也提供了COPT和Gurobi的API，用户能轻松地对各种优化问题进行建模，无需手动编写复杂的求解过程：
+
+#### COPT
+
+```python
+from coptpy import COPT
+from coptpy import Envr
+from pyepo.model.copt import optCoptModel
+
+class myOptModel(optGrbModel):
+    def _getModel(self):
+        # ceate a model
+        m = Envr().createModel()
+        # varibles
+        x = m.addVars(5, nameprefix='x', vtype=COPT.BINARY)
+        # sense
+        m.setObjSense(COPT.MAXIMIZE)
+        # constraints
+        m.addConstr(3*x[0]+4*x[1]+3*x[2]+6*x[3]+4*x[4]<=12)
+        m.addConstr(4*x[0]+5*x[1]+2*x[2]+3*x[3]+5*x[4]<=10)
+        m.addConstr(5*x[0]+4*x[1]+6*x[2]+2*x[3]+3*x[4]<=15)
+        return m, x
+
+optmodel = myOptModel()
+```
+
+#### Gurobi
 
 ```python
 import gurobipy as gp
