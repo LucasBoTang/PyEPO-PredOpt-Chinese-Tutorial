@@ -36,7 +36,7 @@ $$
 
 给定成本向量$\mathbf{c}$，由于退化问题的存在，优化问题可能得到多个最优解，但可以假定使用某种特定的求解器（如Gurobi）时，只返回唯一一个最优解$\mathbf{w}^* (\mathbf{c})$。
 
-有一组数据$\mathbf{D} = \lbrace(\mathbf{x}^1,\mathbf{c}^1), (\mathbf{x}^2,\mathbf{c}^2), ⋯, (\mathbf{x}^n,\mathbf{c}^n)\rbrace$，其中$\mathbf{x}$为数据特征，我们可以利用机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$来最小化某个损失函数$\mathcal{L}(\mathbf{g}(\mathbf{x},\boldsymbol{\theta}),\mathbf{c})$。其中，$\boldsymbol{\theta}$是模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数，会在训练过程中不断更新，而$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$则是成本向量$\mathbf{c}$的预测值。由此我们可以利用数据驱动的方式来预测不确定的参数，帮助实现优化决策。
+有一组数据$\mathbf{D} = \lbrace(\mathbf{x}^1,\mathbf{c}^1), (\mathbf{x}^2,\mathbf{c}^2), ⋯, (\mathbf{x}^n,\mathbf{c}^n)\rbrace$，其中$\mathbf{x}$为数据特征，我们可以利用机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$来最小化某个损失函数$\ell(\mathbf{g}(\mathbf{x},\boldsymbol{\theta}),\mathbf{c})$。其中，$\boldsymbol{\theta}$是模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数，会在训练过程中不断更新，而$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$则是成本向量$\mathbf{c}$的预测值。由此我们可以利用数据驱动的方式来预测不确定的参数，帮助实现优化决策。
 
 ## 3 什么是端对端预测后优化？
 
@@ -44,15 +44,15 @@ $$
 
 ![End-to-End Pipeline Framework](media/df9889a4142bfb2523e1a67d849f72eb.png)
 
-对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x}, \boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \hat{\mathbf{c}}^{\top} \mathbf{w}$，并计算损失函数$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$来直接衡量决策损失。
+对于端对端预测后优化，我们在训练机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的过程中，模型预测了成本向量$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x}, \boldsymbol{\theta})$，然后通过求解器得到最优解$\mathbf{w}^* (\hat{\mathbf{c}}) = \underset{\mathbf{w} \in \mathbf{W}}{\min} \hat{\mathbf{c}}^{\top} \mathbf{w}$，并计算损失函数$\ell(\hat{\mathbf{c}}, \mathbf{c})$来直接衡量决策损失。
 
-借助链式法则，我们能够计算出模型参数$\boldsymbol{\theta}$相对于损失函数$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$的梯度，用于更新模型参数：
+借助链式法则，我们能够计算出模型参数$\boldsymbol{\theta}$相对于损失函数$\ell(\hat{\mathbf{c}}, \mathbf{c})$的梯度，用于更新模型参数：
 
 $$
 \begin{aligned}
-\frac{\partial \mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \boldsymbol{\theta}} 
-& = \frac{\partial \mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \boldsymbol{\theta}} \\
-& = \frac{\partial \mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \mathbf{w}^* (\hat{\mathbf{c}})} \frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \boldsymbol{\theta}}
+\frac{\partial \ell(\hat{\mathbf{c}}, \mathbf{c})}{\partial \boldsymbol{\theta}} 
+& = \frac{\partial \ell(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \boldsymbol{\theta}} \\
+& = \frac{\partial \ell(\hat{\mathbf{c}}, \mathbf{c})}{\partial \mathbf{w}^* (\hat{\mathbf{c}})} \frac{\partial \mathbf{w}^* (\hat{\mathbf{c}})}{\partial \hat{\mathbf{c}}} \frac{\partial \hat{\mathbf{c}}}{\partial \boldsymbol{\theta}}
 \end{aligned}
 $$
 
@@ -64,13 +64,13 @@ $$
 
 ### 4.1 关于两阶段的预测后优化
 
-毫无疑问，采用两阶段的预测后优化，即将机器学习预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$和优化求解器$\mathbf{w}^* (\mathbf{c})$独立使用，看似是一个更为自然、直接的做法。此方法的预测任务中，我们最小化成本向量预测值$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$和真实值$\mathbf{c}$之间的预测误差，如均方误差$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = {\lVert \hat{\mathbf{c}}-\mathbf{c} \rVert}^2$。熟悉机器学习的读者可能会发现，这实际上是一项非常经典的回归任务，对应的模型和算法已经相当成熟。而在决策任务中，一旦给定预测参数$\hat{\mathbf{c}}$，现代求解器可以将问题视作确定性优化直接求解。既然预测任务和决策任务都有成熟的方案，那么为什么我们还要尝试将它们结合在一起？
+毫无疑问，采用两阶段的预测后优化，即将机器学习预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$和优化求解器$\mathbf{w}^* (\mathbf{c})$独立使用，看似是一个更为自然、直接的做法。此方法的预测任务中，我们最小化成本向量预测值$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$和真实值$\mathbf{c}$之间的预测误差，如均方误差$\ell_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = {\lVert \hat{\mathbf{c}}-\mathbf{c} \rVert}^2$。熟悉机器学习的读者可能会发现，这实际上是一项非常经典的回归任务，对应的模型和算法已经相当成熟。而在决策任务中，一旦给定预测参数$\hat{\mathbf{c}}$，现代求解器可以将问题视作确定性优化直接求解。既然预测任务和决策任务都有成熟的方案，那么为什么我们还要尝试将它们结合在一起？
 
-文献中的解释——“与直接考虑决策误差相比，基于预测误差训练预测模型会导致更糟糕的决策。”用人话来说就是：像$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c})$这样的预测误差，不能准确地衡量决策的质量。
+文献中的解释——“与直接考虑决策误差相比，基于预测误差训练预测模型会导致更糟糕的决策。”用人话来说就是：像$\ell_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c})$这样的预测误差，不能准确地衡量决策的质量。
 
 在日常生活中，人们只关心决策的好坏，而不是各项指标预测的准确度。正如我们驱车赶往目的地时，只关心自己是否选中捷径，而无须精确预测每段可能经过的路段所耗费的时间。
 
-让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$\mathcal{L}^_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$\mathcal{L}_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
+让我们回到前文提到的线性优化问题：假设实际成本向量为$\mathbf{c}=(0,1)$，最优解为$\mathbf{w}^* (\mathbf{c}) = (0,1)$。当我们将成本向量预测为$\hat{\mathbf{c}}  = (1,0)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (1,0)$，预测的均方误差$\ell_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 2$；当我们将成本向量预测为$\hat{\mathbf{c}} = (0,3)$，其最优解为$\mathbf{w}^* (\hat{\mathbf{c}}) = (0,1)$，预测的均方误差$\ell_{\text{MSE}} (\hat{\mathbf{c}},\mathbf{c}) = 4$。
 
 这个例子揭示了一个有趣的现象：后者虽然在预测误差上比前者大，但在决策上却是最优的。
 
@@ -109,18 +109,18 @@ Amos和Kolter提出“OptNet” [10]，通过求解KKT条件的偏微分矩阵�
 
 不同于KKT方法，Elmachtoub和Grigas [1] 为目标函数是线性（$\mathbf{c}^{\top} \mathbf{w}$）的决策误差找到了一个凸且可导的替代损失函数SPO+ Loss。
 
-在这里，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们先定义一个决策损失“遗憾”：$\mathcal{L}_{\text{Regret}} (\hat{\mathbf{c}}, \mathbf{c}) = \mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$，衡量实际成本向量$\mathbf{c}$下，实际目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}})$与最优目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$之间的差距，也可以理解为优化间隙（optimality gap）。
+在这里，对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，我们先定义一个决策损失“遗憾”：$\ell_{\text{Regret}} (\hat{\mathbf{c}}, \mathbf{c}) = \mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$，衡量实际成本向量$\mathbf{c}$下，实际目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\hat{\mathbf{c}})$与最优目标值$\mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})$之间的差距，也可以理解为优化间隙（optimality gap）。
 
 由于$\mathbf{w}^* (\mathbf{c})$没有非0导数，这个损失函数同样也没有非0导数。Elmachtoub和Grigas [1] 找到了这个函数的一个凸上界作为替代：
 
 $$
-\mathcal{L}_{\text{SPO+}} (\hat{\mathbf{c}}, \mathbf{c}) = - \underset{\mathbf{w} \in \mathbf{W}}{\min} \{(2 \hat{\mathbf{c}} - \mathbf{c})^{\top} \mathbf{w}\} + 2 \hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})
+\ell_{\text{SPO+}} (\hat{\mathbf{c}}, \mathbf{c}) = - \underset{\mathbf{w} \in \mathbf{W}}{\min} \{(2 \hat{\mathbf{c}} - \mathbf{c})^{\top} \mathbf{w}\} + 2 \hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c}) - \mathbf{c}^{{\top}} \mathbf{w}^* (\mathbf{c})
 $$
 
-对于损失函数$\mathcal{L}_{\text{SPO+}} (\hat{\mathbf{c}}, \mathbf{c})$，有次梯度：
+对于损失函数$\ell_{\text{SPO+}} (\hat{\mathbf{c}}, \mathbf{c})$，有次梯度：
 
 $$
-2 \mathbf{w}^* (\mathbf{c}) - 2 \mathbf{w}^* (2 \hat{\mathbf{c}} - \mathbf{c}) \in \frac{\partial \mathcal{L}_{\text{SPO+}}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}}
+2 \mathbf{w}^* (\mathbf{c}) - 2 \mathbf{w}^* (2 \hat{\mathbf{c}} - \mathbf{c}) \in \frac{\partial \ell_{\text{SPO+}}(\hat{\mathbf{c}}, \mathbf{c})}{\partial \hat{\mathbf{c}}}
 $$
 
 ### 5.3 扰动方法
@@ -150,11 +150,11 @@ $$
 
 基于扰动方法，Berthet等人 [4] 利用了Fenchel-Young对偶的性质，进一步构造了一个新的损失函数，用来降低$F^{\boldsymbol{\xi}}(\hat{\mathbf{c}}) = \mathbb{E}^{\boldsymbol{\xi}}[\underset{\mathbf{w} \in \mathbf{W}}{\min} {\{(\hat{\mathbf{c}}+\sigma \boldsymbol{\xi})^{\top} \mathbf{w}\}}]$的对偶间隙。令$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$为$F^{\boldsymbol{\xi}}(\mathbf{c})$的对偶，则有：
 
-$$\mathcal{L}_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}})) =  \hat{\mathbf{c}}^{\top} \mathbf{w}^* ({\mathbf{c}}) - F^{\boldsymbol{\xi}}(\hat{\mathbf{c}}) - \Omega (\mathbf{w}^*  ({\mathbf{c}}))$$
+$$\ell_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}})) =  \hat{\mathbf{c}}^{\top} \mathbf{w}^* ({\mathbf{c}}) - F^{\boldsymbol{\xi}}(\hat{\mathbf{c}}) - \Omega (\mathbf{w}^*  ({\mathbf{c}}))$$
 
 这个损失函数可能看起来有些复杂，它甚至包含一个神秘的对偶函数$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$。但是，当我们对其进行求导操作时，会发现$\Omega (\mathbf{w}^*  ({\mathbf{c}}))$实际上是常数，因此，梯度表达式非常简单：
 
-$$\frac{\partial \mathcal{L}_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}} = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
+$$\frac{\partial \ell_{\text{PFY}}(\hat{\mathbf{c}}, \mathbf{w}^* ({\mathbf{c}}))}{\partial \hat{\mathbf{c}}} = \mathbf{w}^* ({\mathbf{c}}) - \mathbb{E}^{\boldsymbol{\xi}}  [\mathbf{w}^* (\hat{\mathbf{c}} + \sigma \boldsymbol{\xi})]$$
 
 ### 5.4 黑箱方法
 
@@ -175,7 +175,7 @@ Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contras
 该方法的关键思路是，将非最优可行解的子集$\Gamma \setminus \mathbf{w}^* (c)$作为负样本，让最优解和“负样本”之间的的差值尽可能大。对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，有：
 
 $$
-\mathcal{L}_{\text{NCE}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|-1} \sum_{\mathbf{w} \in {\Gamma \setminus {\mathbf{w}^* (\mathbf{c})}}}(\hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c})-\hat{\mathbf{c}}^{\top} \mathbf{w})
+\ell_{\text{NCE}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|-1} \sum_{\mathbf{w} \in {\Gamma \setminus {\mathbf{w}^* (\mathbf{c})}}}(\hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c})-\hat{\mathbf{c}}^{\top} \mathbf{w})
 $$
 
 受到这项工作构造损失函数区分最优解的启发，Mandi等人 [6] 提出了一种新思路，将端对端预测后优化任务转化为一个排序学习(Learning to rank) [15]，学习一个目标函数（如$\hat{\mathbf{c}}^{\top} \mathbf{w}$）作为排序得分，以便对可行解的子集$\Gamma$进行正确排序（和使用真实成本向量$\mathbf{c}$时一致）。和之前的方法相比，这种方法的优势在于，它对使用的优化方法和目标函数的形式不加以限制。
@@ -184,16 +184,16 @@ $$
 
 在单文档方法中，我们希望成本向量的预测值$\hat{\mathbf{c}}$在可行解的子集$\Gamma$中的得分$\hat{\mathbf{c}}^{\top} \mathbf{w}$尽可能接近$\mathbf{c}^{\top} \mathbf{w}$；在文档对方法中，我们可以在最优解和其他解之间创造排序得分的差值；而在文档列表方法中，我们根据排序得分使用SoftMax函数计算每个可能解$\mathbf{w} \in \Gamma$被排在最前面的概率$P(\mathbf{w} | \mathbf{c})$，然后定义损失为概率的交叉熵:
 $$
-\mathcal{L}_{\text{LTR}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|} \sum_{\mathbf{w} \in \Gamma} P(\mathbf{w} | \mathbf{c}) \log P(\mathbf{w} | \hat{\mathbf{c}})$$
+\ell_{\text{LTR}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|} \sum_{\mathbf{w} \in \Gamma} P(\mathbf{w} | \mathbf{c}) \log P(\mathbf{w} | \hat{\mathbf{c}})$$
 
 ### 5.6 损失函数近似法
 
-最后，我们来聊一个堪称邪道的方法——损失函数近似法。当我们的预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$预测出成本向量$\hat{\mathbf{c}}$后，我们需要寻找最优解$\mathbf{w}^* (\hat{\mathbf{c}})$，然后计算相应的决策损失$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$。然而，这个过程面临着两个主要的问题：一是优化求解过程计算效率低下，二是损失函数$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$可能不存在有效的梯度。
+最后，我们来聊一个堪称邪道的方法——损失函数近似法。当我们的预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$预测出成本向量$\hat{\mathbf{c}}$后，我们需要寻找最优解$\mathbf{w}^* (\hat{\mathbf{c}})$，然后计算相应的决策损失$\ell(\hat{\mathbf{c}}, \mathbf{c})$。然而，这个过程面临着两个主要的问题：一是优化求解过程计算效率低下，二是损失函数$\ell(\hat{\mathbf{c}}, \mathbf{c})$可能不存在有效的梯度。
 
-针对这些问题，Shah等人 [17] 提出了一个颇为惊人的方案：局部优化决策损失（Locally Optimized Decision Loss）。他们提出对于任意决策误差的损失函数$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$，我们都可以使用一个额外的神经网络模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$进行拟合。具体来说，他们通过采样预测成本向量和其对应的真实值$(\hat{\mathbf{c}}, \mathbf{c})$，训练近似函数模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$，其损失定义为真实损失函数$\mathcal{L}(\hat{\mathbf{c}}, \mathbf{c})$和近似损失函数$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的均方误差（MSE）：
+针对这些问题，Shah等人 [17] 提出了一个颇为惊人的方案：局部优化决策损失（Locally Optimized Decision Loss）。他们提出对于任意决策误差的损失函数$\ell(\hat{\mathbf{c}}, \mathbf{c})$，我们都可以使用一个额外的神经网络模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$进行拟合。具体来说，他们通过采样预测成本向量和其对应的真实值$(\hat{\mathbf{c}}, \mathbf{c})$，训练近似函数模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$，其损失定义为真实损失函数$\ell(\hat{\mathbf{c}}, \mathbf{c})$和近似损失函数$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的均方误差（MSE）：
 
 $$
-{ \lVert \mathcal{L}(\hat{\mathbf{c}}, \mathbf{c}) - h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c}) \rVert}^2
+{ \lVert \ell(\hat{\mathbf{c}}, \mathbf{c}) - h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c}) \rVert}^2
 $$
 
 接下来，我们固定好模型$h_{\text{LODL}} (\hat{\mathbf{c}}, \mathbf{c})$的参数，作为决策损失的近似。在这个近似的指导下，我们通过对$h_{\text{LODL}} (\mathbf{g}(\mathbf{x},\boldsymbol{\theta}), \mathbf{c})$执行梯度下降操作来更新预测模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数$\boldsymbol{\theta}$。这个流程既避免了求解优化问题的计算成本，又确保了损失函数能够有效地计算梯度。
@@ -254,10 +254,10 @@ from coptpy import COPT
 from coptpy import Envr
 from pyepo.model.copt import optCoptModel
 
-class myOptMode\mathcal{L}(optGrbModel):
-    def _getMode\mathcal{L}(self):
+class myOptMode\ell(optGrbModel):
+    def _getMode\ell(self):
         # ceate a model
-        m = Envr().createMode\mathcal{L}()
+        m = Envr().createMode\ell()
         # varibles
         x = m.addVars(5, nameprefix='x', vtype=COPT.BINARY)
         # sense
@@ -268,7 +268,7 @@ class myOptMode\mathcal{L}(optGrbModel):
         m.addConstr(5*x[0]+4*x[1]+6*x[2]+2*x[3]+3*x[4]<=15)
         return m, x
 
-optmodel = myOptMode\mathcal{L}()
+optmodel = myOptMode\ell()
 ```
 
 #### Gurobi
@@ -278,10 +278,10 @@ import gurobipy as gp
 from gurobipy import GRB
 from pyepo.model.grb import optGrbModel
 
-class myOptMode\mathcal{L}(optGrbModel):
-    def _getMode\mathcal{L}(self):
+class myOptMode\ell(optGrbModel):
+    def _getMode\ell(self):
         # ceate a model
-        m = gp.Mode\mathcal{L}()
+        m = gp.Mode\ell()
         # varibles
         x = m.addVars(5, name="x", vtype=GRB.BINARY)
         # sense
@@ -292,7 +292,7 @@ class myOptMode\mathcal{L}(optGrbModel):
         m.addConstr(5*x[0]+4*x[1]+6*x[2]+2*x[3]+3*x[4]<=15)
         return m, x
 
-optmodel = myOptMode\mathcal{L}()
+optmodel = myOptMode\ell()
 ```
 
 ### 6.3 生成数据集
