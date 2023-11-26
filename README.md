@@ -254,7 +254,7 @@ from coptpy import COPT
 from coptpy import Envr
 from pyepo.model.copt import optCoptModel
 
-class myOptModel(optGrbModel):
+class myOptModel(optCoptModel):
     def _getModel(self):
         # ceate a model
         m = Envr().createModel()
