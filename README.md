@@ -172,7 +172,7 @@ Mulamba [5] 则是曲线救国，采用了 “噪声对比估计（Noise Contras
 
 首先，由于我们的可行域$\mathbf{w} \in \mathbf{W}$是固定不变的，因此在训练集以及训练、求解过程中，我们可以自然地收集到大量的可行解，形成一个解集合$\Gamma$。
 
-该方法的关键思路是，将非最优可行解的子集$\Gamma \setminus \mathbf{w}^* (c)$作为负样本，让最优解和“负样本”之间的的差值尽可能大。对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，有：
+该方法的关键思路是，将次优解的子集$\Gamma \setminus \mathbf{w}^* (c)$作为负样本，让最优解和“负样本”之间的的差值尽可能大。对于一个最小化问题$\underset{\mathbf{w} \in \mathbf{W}}{\min} \mathbf{c}^{\top} \mathbf{w}$，有：
 
 $$
 \ell_{\text{NCE}} (\hat{\mathbf{c}},\mathbf{c}) = \frac{1}{|\Gamma|-1} \sum_{\mathbf{w} \in {\Gamma \setminus {\mathbf{w}^* (\mathbf{c})}}}(\hat{\mathbf{c}}^{\top} \mathbf{w}^* (\mathbf{c})-\hat{\mathbf{c}}^{\top} \mathbf{w})
