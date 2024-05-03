@@ -32,11 +32,11 @@ s.t. \quad & w_1 + w_2 \leq 1 \\
 \end{aligned}
 $$
 
-在这里，\mathbf{w} = (w_1,w_2)\mathbf{w} = (w_1,w_2)代表的是决策变量，\mathbf{W} = \lbrace w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace\mathbf{W} = \lbrace w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace定义了可行域，而\mathbf{c}=(c_1,c_2)\mathbf{c}=(c_1,c_2)就是我们不确定的成本向量。
+在这里，$\mathbf{w} = (w_1,w_2)$代表的是决策变量，$\mathbf{W} = \lbrace w_1 + w_2 ≤ 1，w_1, w_2 ≥ 0 \rbrace$定义了可行域，而$\mathbf{c}=(c_1,c_2)$就是我们不确定的成本向量。
 
-给定成本向量\mathbf{c}\mathbf{c}，由于退化问题的存在，优化问题可能得到多个最优解，但可以假定使用某种特定的求解器（如Gurobi）时，只返回唯一一个最优解\mathbf{w}^* (\mathbf{c})\mathbf{w}^* (\mathbf{c})。
+给定成本向量$\mathbf{c}$，由于退化问题的存在，优化问题可能得到多个最优解，但可以假定使用某种特定的求解器（如Gurobi）时，只返回唯一一个最优解$\mathbf{w}^* (\mathbf{c})$。
 
-有一组数据$\mathbf{D} = \lbrace(\mathbf{x}^1,\mathbf{c}^1), (\mathbf{x}^2,\mathbf{c}^2), ⋯, (\mathbf{x}^n,\mathbf{c}^n)\rbrace，其中，其中\mathbf{x}为数据特征，我们可以利用机器学习模型为数据特征，我们可以利用机器学习模型\mathbf{g}(\mathbf{x},\boldsymbol{\theta})来最小化某个损失函数来最小化某个损失函数\ell(\mathbf{g}(\mathbf{x},\boldsymbol{\theta}),\mathbf{c})。其中，。其中，\boldsymbol{\theta}是模型是模型\mathbf{g}(\mathbf{x},\boldsymbol{\theta})的参数，会在训练过程中不断更新，而的参数，会在训练过程中不断更新，而\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})则是成本向量则是成本向量\mathbf{c}$的预测值。由此我们可以利用数据驱动的方式来预测不确定的参数，帮助实现优化决策。
+有一组数据$\mathbf{D} = \lbrace(\mathbf{x}^1,\mathbf{c}^1), (\mathbf{x}^2,\mathbf{c}^2), ⋯, (\mathbf{x}^n,\mathbf{c}^n)\rbrace$，其中$\mathbf{x}$为数据特征，我们可以利用机器学习模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$来最小化某个损失函数$\ell(\mathbf{g}(\mathbf{x},\boldsymbol{\theta}),\mathbf{c})$。其中，$\boldsymbol{\theta}$是模型$\mathbf{g}(\mathbf{x},\boldsymbol{\theta})$的参数，会在训练过程中不断更新，而$\hat{\mathbf{c}} = \mathbf{g}(\mathbf{x},\boldsymbol{\theta})$则是成本向量$\mathbf{c}$的预测值。由此我们可以利用数据驱动的方式来预测不确定的参数，帮助实现优化决策。
 
 ## 3 什么是端对端预测后优化？
 
